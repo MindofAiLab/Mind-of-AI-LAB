@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mind-Of-AI Lab</title>
+  <link rel="icon" href="assets/icons/big-dipper.svg" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/floating-text.css" />
+  <link rel="stylesheet" href="css/stars.css" />
+</head>
+<body>
+<section class="hero" aria-label="主页标题">
+  <!-- 现有：北斗七星 -->
+  <canvas id="dipperCanvas" aria-hidden="true"></canvas>
+
+  <!-- 新增：数学拓扑（文本轮廓网络） -->
+  <canvas id="topologyCanvas" aria-hidden="true"></canvas>
+
+  <!-- 现有：力导向社区图 -->
+  <canvas id="networkCanvas" aria-hidden="true"></canvas>
+  
+    <!-- 内容区背景可视化（覆盖导航右侧，位于英雄区下方/文字后面） -->
+<canvas id="contentBgCanvas" class="content-bg-canvas" aria-hidden="true"></canvas>
+
+  <h1 class="hero-title" aria-label="Mind Of AI"></h1>
+  <p class="hero-subtitle">AI Safety & AI Security</p>
+  <a class="hero-cta" href="#" data-section="overview" role="button">More</a>
+</section>
+
+  <div class="app">
+    <!-- 左侧竖直导航 -->
+    <aside class="sidebar" role="navigation" aria-label="实验室导航">
+      <div class="brand">
+        <img class="brand-mark" src="assets/icons/big-dipper.svg" alt="" />
+        <div class="brand-text">
+          <span class="brand-title">Mind-Of-AI</span>
+          <span class="brand-sub">Laboratory</span>
+        </div>
+        <button id="sidebarToggle" class="sidebar-toggle" aria-label="折叠导航栏" aria-expanded="true">☰</button>
+      </div>
+
+      <ul class="nav-list">
+        <li><a href="#home" data-target="home" class="nav-link active">Home</a></li>
+        <li><a href="#showcase" data-target="showcase" class="nav-link">Research Showcase</a></li>
+        <li><a href="#people" data-target="people" class="nav-link">Team</a></li>
+        <li><a href="#funding" data-target="funding" class="nav-link">Funding</a></li>
+        <li><a href="#resources" data-target="resources" class="nav-link">Resources</a></li>
+      </ul>
+
+      <div class="nav-footer">
+        <a class="github-link" href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a class="github-link" href="https://gugu11riji.github.io/Mind-of-AI/" target="_blank" rel="noopener">DATA</a>
+      </div>
+    </aside>
+
+    <!-- 右侧主内容，不换页 -->
+    <main class="main" role="main">
+      <!-- 首页：大标题 + 副标题（标题浮动，后有拓扑网络动画） -->
+      <section id="home" class="route active" aria-label="首页">
+        <h1 id="labTitle" class="floating-title" aria-label="Mind-Of-AI">Mind-Of-AI</h1>
+        <p class="tagline">Spectral Intelligence for Safer AI</p>
+        <div class="glass-card">
+          <p>Welcome to <strong>Mind-Of-AI LAB</strong>. We focus on cutting-edge interdisciplinary areas such as <em>AI security, federated learning, and RMT spectral monitoring</em>, dedicated to rigorous and verifiable academic research and high-impact open-source contributions.</p> <p>On the left, you can switch between "Academic Showcase / Personnel Showcase / Funding / Public Materials," all of which are rendered instantly on this page without needing to navigate elsewhere.</p>
+        </div>
+      </section>
+
+     <section id="section-overview"
+  class="content-section centered float-section"
+  tabindex="-1" aria-labelledby="section-overview-title">
+        <h2 id="section-overview-title">Publications & Highlights</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Research Directions</h3> <p>AI security, random matrix theory, explainability.</p>
+          </article>
+          <article class="card">
+            <!-- <h3>代表性成果（示例）</h3>
+            <ul class="bullets"> -->
+              <!-- <li>RMT-based Update Spectrum Monitoring for FL Security</li>
+              <li>Topology-aware Visualization of Gradient Streams</li>
+              <li>Stealthy Poisoning Defense via Spectral Thresholding</li> -->
+            <!-- </ul> -->
+          </article>
+          <article class="card">
+            <h3>Open Source and Datasets</h3>
+            <p>Our code, visualization resources, and small dataset samples will be hosted in open-source form on GitHub.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="section-members" class="content-section" tabindex="-1" aria-labelledby="section-members-title">
+        <h2 id="section-members-title">Members</h2>
+        <div class="team-grid float-group">
+  <!-- 成员 1 -->
+  <article class="member-card" tabindex="0">
+    <header class="member-head">
+      <div class="avatar" aria-hidden="true">G</div>
+      <div class="ident">
+        <h3 class="name">GuAn</h3>
+        <div class="roles">
+          <span class="tag">PhD Candidate</span>
+          <span class="tag">AI Safety</span>
+          <span class="tag">AI Safety / RMT</span>
+        </div>
+      </div>
+    </header>
+    <!-- <p class="bio">&&&</p> -->
+    <div class="links">
+      <a href="2156089884@qq.com" aria-label="Email">✉︎ Email</a>
+      <a href="#" aria-label="GitHub">@mind-of-ai</a>
+    </div>
+  </article>
+
+  <!-- 成员 2 -->
+  <article class="member-card" tabindex="0">
+    <header class="member-head">
+      <div class="avatar" aria-hidden="true">T</div>
+      <div class="ident">
+        <h3 class="name">Siyao Lan</h3>
+        <div class="roles">
+          <span class="tag">China University of Geosciences Beijing</span>
+          <span class="tag">AI Safety</span>
+          <span class="tag">Systems</span>
+        </div>
+      </div>
+    </header>
+    <!-- <p class="bio">工程化可视与系统支撑，联邦安全管线研发。</p> -->
+    <div class="links">
+      <a href="lancer20060105@gmail.com " aria-label="Email">personal</a>
+    </div>
+  </article>
+
+  <!-- 需要更多成员？按这个 <article> 结构复制即可 -->
+     <!-- 成员 3 -->
+  <article class="member-card" tabindex="0">
+    <header class="member-head">
+      <div class="avatar" aria-hidden="true">T</div>
+      <div class="ident">
+        <h3 class="name">Xinlong Hu</h3>
+        <div class="roles">
+          <span class="tag">Tibet University</span>
+          <span class="tag">Computer vision, AI and physical model integration for geomagnetic storm activity prediction.</span>
+          <span class="tag">Systems</span>
+        </div>
+      </div>
+    </header>
+    <!-- <p class="bio">工程化可视与系统支撑，联邦安全管线研发。</p> -->
+    <div class="links">
+      <a href="erhuer2@163.com" aria-label="Email">personal</a>
+    </div>
+  </article>
+</div>
+
+      </section>
+
+      <!-- 资助 -->
+      <section id="funding" class="route" aria-label="资助">
+        <div class="section-head">
+          <h2>Funding</h2>
+          <p>If you are interested in our public resources 
+            (which will be continuously updated) and/or feel that they are helpful for your learning and research, you can support us in the following ways:</p>
+        </div>
+        <div class="grid">
+          <div class="glass-card">
+            <h3>(1) </h3>
+            <p>Purchase our scientific research merchandise. Currently, we offer a desktop ornament to assist research at top conferences, as shown in the image. To purchase: scan the Alipay QR code below, pay 200 RMB, and send the payment screenshot along with your 
+              personal information and address to the email: 2156089884@qq.com. Please include the message: "Support Mind-Of-AI Research Merchandise."</p>
+          </div>
+          <div class="glass-card">
+            <h3>(1) -中文</h3>
+
+            <p>购买我们的周边科研产品，目前有顶会科研助力桌面摆件，
+            所示如图。购买方法：扫描以下的支付宝，付款200元！将付款截图和个人信息地址发送邮箱：2156089884@qq.com，发送信息为：支持Mind-Of-AI科研周边</p>
+          </div>
+          <div class="glass-card">
+            <h3>(2)</h3>
+            <p>If you are a person of great stature, you can directly sponsor us via Alipay! To express our gratitude, we will acknowledge your support on our page and mention you in the acknowledgments section when we publish a book in the future. Please send your personal information 
+              (that you are willing to make public) and address to the email: 2156089884@qq.com. Include the message: "Personal Support for Mind-Of-AI."</p>
+        
+          </div>
+          <div class="glass-card">
+            <h3>(2)-中文</h3>
+      
+            <p>如果您是上帝那般的人物，可以直接通过支付宝来赞助我们！我们为了表达感谢，将在我们的页面表达对您的感恩，
+            同时在未来出书时，也会在致谢部分提及您。将个人信息（愿意公开的）地址发送邮箱：2156089884@qq.com，发送信息为：个人支持Mind-Of-AI</p>
+          </div>
+        
+
+        </div>
+        <div class="funding-media">
+  <figure>
+    <img
+      src="assets\images\微信图片_20250904212652_606_74.jpg"
+      alt="Mind-Of-AI 桌面摆件示意图"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="low"
+    />
+    <figcaption>桌面摆件 点击图片放大</figcaption>
+  </figure>
+
+  <figure>
+    <img
+      src="assets\images\M.jpg"
+      alt="200"
+      loading="lazy"
+      decoding="async"
+      fetchpriority="low"
+    />
+    <figcaption>支付宝二维码 点击图片放大</figcaption>
+  </figure>
+</div>
+      </section>
+
+      <!-- 公开资料 -->
+      <section id="resources" class="route" aria-label="公开资料">
+        <!-- <div class="section-head">
+          <h2>公开资料 / Resources</h2>
+          <p>讲义、幻灯与数据脚本。</p>
+        </div>
+        <div class="grid">
+          <div class="glass-card">
+            <h3>Slides & Talks</h3>
+            <ul>
+              <li><a href="#">RMT Spectra for Update Streams (PDF)</a></li>
+              <li><a href="#">Federated Anomaly Benchmarks (Keynote)</a></li>
+            </ul>
+          </div>
+          <div class="glass-card">
+            <h3>Datasets & Scripts</h3>
+            <ul>
+              <li><a href="#">CIFAR / MNIST loaders</a></li>
+              <li><a href="#">Tiny-ImageNet setup</a></li>
+            </ul>
+          </div>
+        </div> -->
+        <div class="resources-panel">
+  <div class="resources-list" id="resources-list">
+    <!-- JS 会根据 data/resources.json 渲染文档条目 -->
+  </div>
+
+  <!-- 右侧嵌入式 PDF 预览（初始隐藏） -->
+  <div class="pdf-viewer" id="pdfViewer" hidden>
+    <div class="pdf-toolbar">
+      <button id="pdfClose" aria-label="关闭预览">✕</button>
+      <div class="pdf-meta">
+        <strong id="pdfTitle">—</strong>
+        <span id="pdfInfo"></span>
+      </div>
+      <div class="pdf-actions">
+        <a id="pdfDownload" download>下载</a>
+        <a id="pdfNewtab" target="_blank" rel="noopener">新标签打开</a>
+      </div>
+    </div>
+    <iframe id="pdfFrame" title="PDF Viewer" loading="lazy"></iframe>
+    <div class="pdf-fallback" id="pdfFallback" hidden>
+      无法内嵌预览。你可以 <a id="pdfFallbackLink" target="_blank" rel="noopener">点此打开</a> 或下载。
+    </div>
+  </div>
+</div>
+      </section>
+      <dialog id="imgZoom" class="img-zoom">
+      <img alt="" />
+    </dialog>
+    </main>
+  </div>
+
+<!-- JS 顺序：Navbar → Force Network → Dipper → Topology → Stars -->
+<script src="js/navbar.js"></script>
+<script src="js/floating-text.js"></script>
+<script src="js/dipper.js"></script>
+<script src="js/topology.js"></script>
+<script src="js/stars.js"></script>
+<script src="js/content-bg.js"></script>
+<script src="js/section-float.js"></script>
+<script src="js/resources.js"></script>
+<script>
+  (function(){
+    const dlg = document.getElementById('imgZoom');
+    if(!dlg) return;
+    document.addEventListener('click', (e)=>{
+      const img = e.target.closest('.funding-media img');
+      if(!img) return;
+      dlg.querySelector('img').src = img.src;
+      dlg.showModal();
+    });
+    dlg.addEventListener('click', ()=> dlg.close());
+  })();
+</script>
+
+
+</body>
+</html>
