@@ -1,0 +1,60 @@
+.hero{
+  position: relative;
+  height: clamp(560px, 64vh, 720px); /* 原来较小 → 放大展示字样 */
+  margin: 24px clamp(16px, 3vw, 40px) 12px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: radial-gradient(1200px 600px at 40% -10%, rgba(110,243,255,.18), rgba(255,255,255,0) 60%),
+              linear-gradient(180deg, rgba(10,12,16,.55), rgba(10,12,16,.18));
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: var(--shadow);
+}
+
+#dipperCanvas, #networkCanvas, #topologyCanvas{
+  position:absolute; inset:0; width:100%; height:100%; pointer-events:none;
+}
+
+/* 分层：北斗在最下 → 力导向网络 → 数学拓扑 → 文字在最上 */
+#dipperCanvas{ z-index: 1; }
+#networkCanvas{ z-index: 2; }
+#topologyCanvas{ z-index: 3; }
+
+.hero-title, .hero-subtitle, .hero-cta{ z-index: 4; position: absolute; }
+
+
+/* 分层：北斗在下、网络在上、文字最上 */
+#dipperCanvas{ z-index: 1; }
+#networkCanvas{ z-index: 2; }
+
+.hero-title{
+  position:absolute; inset:auto 0 36% 0;
+  margin:auto; text-align:center; font-size: clamp(42px, 8vw, 92px);
+  letter-spacing: .02em; font-weight: 800;
+  text-shadow:
+    0 0 22px rgba(110,243,255,.35),
+    0 0 40px rgba(110,243,255,.12);
+  animation: floatY 5.5s ease-in-out infinite;
+  z-index: 3;
+}
+.hero-subtitle{
+  position:absolute; inset:auto 0 26% 0; text-align:center;
+  color: var(--muted);
+  font-size: clamp(14px, 1.7vw, 18px);
+  letter-spacing:.4px;
+  z-index: 3;
+}
+.hero-cta{
+  position:absolute; inset:auto 0 12% 0; width:max-content; margin: 0 auto;
+  padding: 10px 14px; border-radius: 999px;
+  background: rgba(110,243,255,.18);
+  border: 1px solid rgba(110,243,255,.35);
+  color:#eafcff; text-decoration: none;
+  transition: transform .18s ease, background .2s ease;
+  z-index: 3;
+}
+.hero-cta:hover{ transform: translateY(-2px); background: rgba(110,243,255,.25); }
+
+@keyframes floatY{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+}

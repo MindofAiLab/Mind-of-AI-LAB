@@ -1,0 +1,457 @@
+:root{
+  --bg: #0a0f1e;
+  --bg-2: #0f1630;
+  --card: rgba(255,255,255,0.06);
+  --card-border: rgba(255,255,255,0.10);
+  --text: #E8ECFF;
+  --muted: #A7B1D6;
+  --accent: #7aa2ff;
+  --accent-2: #8cf5ff;
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+*{ box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin: 0;
+  color: var(--text);
+  font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  /* 背景图底层做兜底 */
+  background-image: radial-gradient(ellipse at top, #15204a 0%, transparent 60%), url("../assets/images/space-background.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.app{
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+.main{
+  position: relative;
+  padding: 48px clamp(24px, 4vw, 60px);
+  overflow: hidden;
+}
+
+/* 受导航控制的路由可见性 */
+.route{ display: none; }
+.route.active{ display: block; }
+
+/* 通用卡片 */
+.glass-card{
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+.section-head{
+  margin-bottom: 16px;
+}
+.section-head h2{
+  margin: 0 0 6px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+.grid{
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.meta{
+  padding-left: 18px;
+  color: var(--muted);
+}
+a{ color: var(--accent); text-decoration: none; }
+a:hover{ color: var(--accent-2); }
+
+/* 头像占位 */
+.profile .avatar{
+  width: 56px;
+  height: 56px;
+  margin-right: 12px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #324a94, #5bd6f6);
+  box-shadow: var(--shadow);
+}
+.profile{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 首页 tagline */
+.tagline{
+  margin-top: 8px;
+  margin-bottom: 24px;
+  color: var(--muted);
+}
+
+/* 响应式：窄屏时侧栏折叠为 72px */
+@media (max-width: 960px){
+  .app{ grid-template-columns: 72px 1fr; }
+}
+@media (max-width: 640px){
+  .main{ padding: 32px 16px; }
+}
+
+
+/* ——— 内容区数学可视化画布（在导航右侧，固定铺满视口；z-index 介于星空与内容卡片之间） ——— */
+.content-bg-canvas{
+  position: fixed;
+  top: 0; bottom: 0;
+  left: var(--sidebar-w); /* 避开左侧导航 */
+  right: 0;
+  z-index: -1;           /* 在 bg-layer(-2) 之上，在内容之下 */
+  pointer-events: none;  /* 不遮挡交互 */
+  opacity: .88;          /* 轻微透过；具体透明度主要由绘制决定 */
+}
+/* —— 居中与群组浮动（学术展示 / 人员展示） —— */
+.content-section.centered{
+  /* 居中：占据中部可视空间 */
+  min-height: clamp(480px, 62vh, 760px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  /* 让卡片底部留气口，避免贴边 */
+  padding-block: clamp(16px, 4vh, 32px);
+}
+
+.centered .cards{
+  max-width: min(1100px, 92%);
+  justify-content: center; align-items: stretch;
+  margin-top: clamp(8px, 2vh, 16px);
+}
+
+/* 群组整体浮动与鼠标视差（不影响点击） */
+.float-section{
+  --mx: 0px;  /* JS 注入的视差偏移 */
+  --my: 0px;
+}
+.float-group{
+  will-change: transform;
+  animation: groupFloat 8.5s ease-in-out infinite;
+  transform: translate3d(calc(var(--mx) * 0.02), calc(var(--my) * 0.02), 0);
+}
+
+@keyframes groupFloat{
+  0%,100%{ transform: translate3d(calc(var(--mx)*0.02), calc(var(--my)*0.02), 0) }
+  50%    { transform: translate3d(calc(var(--mx)*0.02 + 6px), calc(var(--my)*0.02 - 8px), 0) }
+}
+
+/* 单卡片轻微相位漂移（非常克制，不干扰阅读） */
+.centered .card{
+  will-change: transform, box-shadow;
+  animation: cardDrift var(--driftDur, 9s) ease-in-out infinite;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+@keyframes cardDrift{
+  0%,100%{ transform: translate3d(0,0,0) }
+  50%    { transform: translate3d(var(--dx, 4px), var(--dy, -6px), 0) }
+}
+
+/* 不同卡片不同相位与位移 */
+.centered .card:nth-child(3n+1){ --dx: 6px;  --dy: -8px; --driftDur: 9.2s; }
+.centered .card:nth-child(3n+2){ --dx: -5px; --dy: -5px; --driftDur: 8.6s; }
+.centered .card:nth-child(3n+3){ --dx: 4px;  --dy: -6px; --driftDur: 9.8s; }
+
+/* 标题轻度呼吸（保持学术克制） */
+.centered > h2{
+  animation: titleFloat 7s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(110,243,255,.08);
+}
+@keyframes titleFloat{
+  0%,100%{ transform: translateY(0) }
+  50%    { transform: translateY(-4px) }
+}
+
+/* 悬停时微增强但不过度，与动画兼容 */
+.centered .card:hover{
+  transform: translate3d(0, -6px, 0) scale(1.01);
+  box-shadow: 0 14px 30px rgba(0,0,0,.35);
+}
+
+/* 窄屏优化：居中但减少位移量与高度 */
+@media (max-width: 720px){
+  .content-section.centered{ min-height: clamp(420px, 58vh, 680px); }
+  .centered .card{ animation-duration: 10.5s; }
+  .centered .card:nth-child(n){ --dx: 3px; --dy: -4px; }
+}
+/* —— 路由显示/隐藏：默认都隐藏，只有 .active 才显示 —— */
+.route{ display:none; }
+.route.active{ display:block; }
+
+/* 已有的 content-section 规则基础上，补齐 centered 的 flex 显示 */
+.content-section{ display:none; }
+.content-section.active{ display:block; }
+.content-section.centered.active{ display:flex; }
+
+
+
+
+/* 强制尊重 hidden 属性（防止任意样式把它显示出来） */
+[hidden] { display: none !important; }
+
+/* 路由与内容区块默认隐藏 */
+.route,
+.content-section,
+.content-section.centered { display: none; }
+
+/* 只有激活的才显示 */
+.route.active { display: block; }
+.content-section.active { display: block; }
+
+/* 居中版块在激活时才用 flex 展开 */
+.content-section.centered.active { display: flex; }
+
+/* ======= Personnel / Members ======= */
+.team-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  width: min(1100px, 92%);
+}
+
+.member-card{
+  position: relative;
+  background: var(--glass);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;          /* 矩形卡片（圆角可调） */
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  will-change: transform, box-shadow;
+  animation: memberDrift var(--mDur, 9s) ease-in-out infinite;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+/* 顶部细线高亮条：学术克制 */
+.member-card::before{
+  content:"";
+  position:absolute; inset:0 0 auto 0; height: 3px;
+  background: linear-gradient(90deg, rgba(110,243,255,.35), rgba(142,197,255,.18));
+  opacity:.7;
+}
+
+/* 悬停/焦点：轻微抬升与发光 */
+.member-card:hover,
+.member-card:focus{
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.35);
+  border-color: rgba(110,243,255,.35);
+  outline: none;
+}
+
+/* 头像 + 身份行 */
+.member-head{
+  display:flex; align-items:center; gap:12px; margin-bottom:8px;
+}
+.member-head .avatar{
+  width:48px; height:48px; border-radius: 12px;     /* 保持矩形风格 */
+  display:grid; place-items:center;
+  font-weight:800;
+  background: linear-gradient(180deg, rgba(110,243,255,.25), rgba(110,243,255,.08));
+  border: 1px solid rgba(255,255,255,.12);
+  color:#eafcff;
+  text-shadow: 0 0 10px rgba(110,243,255,.25);
+}
+.member-head .name{
+  margin:0; font-size:1.05rem; letter-spacing:.2px;
+}
+.roles{ margin-top:4px; display:flex; flex-wrap:wrap; gap:6px; }
+.tag{
+  padding: 2px 8px; font-size:.78rem; border-radius: 999px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  color: var(--muted);
+}
+
+.bio{ margin: 8px 0 10px; color: var(--muted); }
+
+.links{ display:flex; gap:12px; flex-wrap:wrap; }
+.links a{
+  font-size:.88rem; text-decoration:none; color:#eafcff;
+  padding:6px 10px; border-radius: 10px;
+  background: rgba(110,243,255,.14);
+  border: 1px solid rgba(110,243,255,.30);
+  transition: background .18s ease, transform .18s ease;
+}
+.links a:hover{ transform: translateY(-2px); background: rgba(110,243,255,.22); }
+
+/* 每张卡不同的漂浮相位/周期（克制，不干扰阅读） */
+.member-card:nth-child(3n+1){ --mDur: 9.2s; animation-delay: 0s;   }
+.member-card:nth-child(3n+2){ --mDur: 8.6s; animation-delay: .4s; }
+.member-card:nth-child(3n+3){ --mDur: 9.8s; animation-delay: .8s; }
+
+@keyframes memberDrift{
+  0%,100%{ transform: translate3d(0,0,0); }
+  50%    { transform: translate3d(4px, -6px, 0); }
+}
+
+/* 窄屏优化 */
+@media (max-width: 720px){
+  .team-grid{ gap: 12px; }
+  .member-card{ padding: 14px; }
+  .member-head .avatar{ width:44px; height:44px; border-radius:10px; }
+}
+
+
+/* ==== 公开资料（PDF 列表 + 内嵌查看器） ==== */
+.resources-panel{
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.resources-list{
+  background: var(--glass);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: var(--shadow);
+  max-height: 72vh;
+  overflow: auto;
+}
+
+.resource-item{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 10px;
+  padding: 10px 10px 10px 12px;
+  border-radius: 10px;
+  transition: background .15s ease, transform .15s ease;
+  cursor: pointer;
+}
+.resource-item:hover{ background: rgba(255,255,255,.06); transform: translateX(2px); }
+.resource-title{ font-weight: 600; }
+.resource-meta{ font-size: .85rem; color: var(--muted); }
+.resource-tags{ display:flex; gap:6px; flex-wrap:wrap; }
+.resource-tag{
+  padding: 2px 6px; border-radius: 999px;
+  font-size: .72rem; color: var(--muted);
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* 右侧 PDF 查看器 */
+.pdf-viewer{
+  position: relative;
+  background: linear-gradient(180deg, rgba(10,12,16,.35), rgba(10,12,16,.15));
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  min-height: 72vh;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.pdf-toolbar{
+  display:flex; align-items:center; gap:12px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(10,12,16,.45);
+  backdrop-filter: blur(6px);
+}
+#pdfClose{
+  all: unset; cursor: pointer;
+  width: 28px; height: 28px; display:grid; place-items:center;
+  border-radius: 8px; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+}
+#pdfClose:hover{ background: rgba(255,255,255,.10); }
+.pdf-meta{ flex:1 1 auto; min-width: 0; }
+#pdfTitle{ margin-right: 8px; }
+#pdfInfo{ color: var(--muted); font-size: .9rem; }
+.pdf-actions{ display:flex; gap:10px; }
+.pdf-actions a{
+  font-size:.88rem; text-decoration:none; color:#eafcff;
+  padding:6px 10px; border-radius: 8px;
+  background: rgba(110,243,255,.14);
+  border: 1px solid rgba(110,243,255,.30);
+}
+.pdf-actions a:hover{ background: rgba(110,243,255,.22); }
+
+#pdfFrame{
+  display:block; width: 100%; height: calc(72vh - 48px);
+  border: 0;
+}
+
+/* 内嵌失败的兜底提示 */
+.pdf-fallback{
+  padding: 12px; color: var(--muted);
+}
+
+/* 窄屏：查看器折行 */
+@media (max-width: 960px){
+  .resources-panel{
+    grid-template-columns: 1fr;
+  }
+  #pdfFrame{ height: 64vh; }
+}
+
+/* ==== Funding 图片布局 ==== */
+.funding-media{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+  align-items: start;
+}
+
+.funding-media figure{
+  margin: 0;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+
+.funding-media img{
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  image-rendering: -webkit-optimize-contrast;
+  background: #0b0e12; /* 避免透明 PNG 在暗底下看不清 */
+}
+
+.funding-media figcaption{
+  margin-top: 6px;
+  font-size: .85rem;
+  color: var(--muted, #aab7c4);
+  text-align: center;
+}
+
+/* 小屏优化 */
+@media (max-width: 560px){
+  .funding-media{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Funding 图片整体更小 */
+.funding-media{
+  justify-items: center;                 /* 居中每个 figure */
+  grid-template-columns: repeat(auto-fit, minmax(140px, 220px)); /* 上限 ~220px */
+}
+
+/* figure 自身再设一个上限，避免拉满卡片宽度 */
+.funding-media figure{
+  width: clamp(140px, 28vw, 220px);      /* 视口变大时也不超过 220px */
+}
+
+/* 保持自适应比例 */
+.funding-media img{
+  width: 100%;
+  height: auto;
+}
+.img-zoom{
+  padding: 0; border: none; background: transparent;
+  max-width: 90vw; max-height: 90vh;
+}
+.img-zoom::backdrop{ background: rgba(0,0,0,.6); }
+.img-zoom img{ display:block; max-width: 90vw; max-height: 90vh; border-radius: 12px; }
